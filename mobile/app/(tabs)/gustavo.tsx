@@ -9,7 +9,7 @@ import { Link } from 'expo-router';
 export default function HomeScreen() {
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#0000CD', dark: '#0000CD' }}
+      headerBackgroundColor={{ light: '#7FFF00', dark: '#7FFF00' }}
       headerImage={
         <Image
           source={require('@/assets/images/Ben 10 classico.jpg')}
@@ -87,10 +87,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   reactLogo: {
-    height: 178,
-    width: 290,
+    height: 280,
+    width: 200,
     bottom: 0,
-    left: 0,
+    left: 100,
     position: 'absolute',
   },
 });

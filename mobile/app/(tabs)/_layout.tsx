@@ -1,9 +1,12 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import Feather from '@expo/vector-icons/Feather';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import Octicons from '@expo/vector-icons/Octicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { Tabs } from 'expo-router';
+import React from 'react';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -11,11 +14,11 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#00FF00', // Verde do Omnitrix
-        tabBarInactiveTintColor: '#FFFFFF', // Branco
+        tabBarActiveTintColor: '#00FF00',
+        tabBarInactiveTintColor: '#FFFFFF',
         tabBarStyle: {
-          backgroundColor: '#000000', // Fundo preto
-          borderTopColor: '#00FF00', // Borda verde
+          backgroundColor: '#000000',
+          borderTopColor: '#00FF00',
           borderTopWidth: 2,
         },
         headerShown: false,
@@ -28,31 +31,32 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Início',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="star.fill" color={color} />,
+          title: 'Página de login',
+          tabBarIcon: ({ color }) => <FontAwesome6 name="people-group" size={24} color="white" />,
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
           title: 'Aliens',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="sparkles" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="alien" size={24} color="white" />
         }}
       />
       <Tabs.Screen
-        name="omnitrix"
+        name="paulo"
         options={{
           title: 'Omnitrix',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="circle.hexagongrid.fill" color={color} />,
+          tabBarIcon: ({ color }) => <Octicons name="clock" size={24} color="white" />
         }}
       />
       <Tabs.Screen
-        name="vilões"
+        name="gustavo"
         options={{
-          title: 'Vilões',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="bolt.fill" color={color} />,
+          title: 'Série',
+          tabBarIcon: ({ color }) => <Feather name="film" size={24} color="white" />
         }}
       />
+      
     </Tabs>
   );
 }

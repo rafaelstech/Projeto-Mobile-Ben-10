@@ -1,13 +1,34 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
 import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Link } from 'expo-router';
+import { useState } from 'react';
 
 export default function HomeScreen() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    // Simulação de login - você pode substituir por sua lógica de autenticação
+    if (email && password) {
+      setIsLoggedIn(true);
+      alert('Login realizado com sucesso!');
+    } else {
+      alert('Por favor, preencha todos os campos.');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setEmail('');
+    setPassword('');
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -17,10 +38,80 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
+      
+      {/* Área de Login */}
+      <ThemedView style={styles.loginContainer}>
+        <ThemedText type="title" style={styles.loginTitle}>
+          {isLoggedIn ? 'Bem-vindo de volta!' : 'Login'}
+        </ThemedText>
+
+        {!isLoggedIn ? (
+          <>
+            <ThemedView style={styles.inputContainer}>
+              <ThemedText type="defaultSemiBold" style={styles.label}>
+                E-mail
+              </ThemedText>
+              <TextInput
+                style={styles.input}
+                placeholder="seu@email.com"
+                placeholderTextColor="#999"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </ThemedView>
+
+            <ThemedView style={styles.inputContainer}>
+              <ThemedText type="defaultSemiBold" style={styles.label}>
+                Senha
+              </ThemedText>
+              <TextInput
+                style={styles.input}
+                placeholder="Sua senha"
+                placeholderTextColor="#999"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+              />
+            </ThemedView>
+
+            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+              <ThemedText type="defaultSemiBold" style={styles.loginButtonText}>
+                Entrar
+              </ThemedText>
+            </TouchableOpacity>
+
+            <ThemedView style={styles.registerContainer}>
+              <ThemedText style={styles.registerText}>
+                Não tem uma conta?{' '}
+              </ThemedText>
+              <TouchableOpacity>
+                <ThemedText type="defaultSemiBold" style={styles.registerLink}>
+                  Cadastre-se
+                </ThemedText>
+              </TouchableOpacity>
+            </ThemedView>
+          </>
+        ) : (
+          <ThemedView style={styles.loggedInContainer}>
+            <ThemedText style={styles.welcomeText}>
+              Você está logado como: {email}
+            </ThemedText>
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+              <ThemedText type="defaultSemiBold" style={styles.logoutButtonText}>
+                Sair
+              </ThemedText>
+            </TouchableOpacity>
+          </ThemedView>
+        )}
+      </ThemedView>
+
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welco</ThemedText>
+        <ThemedText type="title">Welcome</ThemedText>
         <HelloWave />
       </ThemedView>
+      
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
@@ -36,6 +127,7 @@ export default function HomeScreen() {
           to open developer tools.
         </ThemedText>
       </ThemedView>
+      
       <ThemedView style={styles.stepContainer}>
         <Link href="/modal">
           <Link.Trigger>
@@ -64,6 +156,7 @@ export default function HomeScreen() {
           {`Tap the Explore tab to learn more about what's included in this starter app.`}
         </ThemedText>
       </ThemedView>
+      
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
         <ThemedText>
@@ -94,5 +187,75 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  // Estilos da área de login
+  loginContainer: {
+    gap: 16,
+    marginBottom: 24,
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(161, 206, 220, 0.1)',
+  },
+  loginTitle: {
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  inputContainer: {
+    gap: 4,
+  },
+  label: {
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#A1CEDC',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: 'white',
+  },
+  loginButton: {
+    backgroundColor: '#A1CEDC',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  loginButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  registerText: {
+    fontSize: 14,
+  },
+  registerLink: {
+    color: '#A1CEDC',
+    fontSize: 14,
+  },
+  loggedInContainer: {
+    alignItems: 'center',
+    gap: 16,
+  },
+  welcomeText: {
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  logoutButton: {
+    backgroundColor: '#FF6B6B',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    minWidth: 100,
+  },
+  logoutButtonText: {
+    color: 'white',
+    fontSize: 14,
   },
 });

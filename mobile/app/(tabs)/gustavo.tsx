@@ -9,7 +9,7 @@ import { Link } from 'expo-router';
 export default function HomeScreen() {
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#00008B', dark: '#7FFF00' }}
+      headerBackgroundColor={{ light: '#7FFF00', dark: '#7FFF00' }}
       headerImage={
         <Image
           source={require('@/assets/images/Ben 10 classico.jpg')}
@@ -31,6 +31,7 @@ export default function HomeScreen() {
               web: '',
             })}
           </ThemedText>{' '}
+          <img src="ben 10 wallpaper" alt="" />
         
         </ThemedText>
       </ThemedView>
@@ -59,7 +60,7 @@ export default function HomeScreen() {
           </Link.Menu>
         </Link>
 
-        <ThemedText>Os personagens ao redor do Ben são fundamentais para o coração e o humor da série.
+        <ThemedText>
           {``}
         </ThemedText>
       </ThemedView>

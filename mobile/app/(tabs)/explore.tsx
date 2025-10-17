@@ -174,67 +174,68 @@ const StatsBar = ({ label, value, max = 10, color = "#3498DB" }) => (
 );
 
 // Componente para exibir cada alien
-const AlienCard = ({ alien }) => (
-  <ThemedView style={styles.alienCard}>
-    <ThemedText type="title" style={styles.alienName}>
-      {alien.name}
-    </ThemedText>
-    
-    <Image
-      source={{ uri: alien.image }}
-      style={styles.alienImage}
-      contentFit="contain"
-      transition={1000}
-    />
-    
-    <View style={styles.infoGrid}>
-      <View style={styles.infoItem}>
-        <ThemedText type="defaultSemiBold">Espécie:</ThemedText>
-        <ThemedText style={styles.infoText}>{alien.species}</ThemedText>
-      </View>
-      <View style={styles.infoItem}>
-        <ThemedText type="defaultSemiBold">Planeta:</ThemedText>
-        <ThemedText style={styles.infoText}>{alien.homeWorld}</ThemedText>
-      </View>
-    </View>
-
-    <ThemedText style={styles.alienDescription}>
-      {alien.description}
-    </ThemedText>
-
-    <ThemedView style={styles.statsSection}>
-      <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
-        Estatísticas:
+const AlienCard = ({ alien }) => {
+  return (
+    <ThemedView style={styles.alienCard}>
+      <ThemedText type="title" style={styles.alienName}>
+        {alien.name}
       </ThemedText>
-      <StatsBar label="Força" value={alien.powerLevel} color="#E74C3C" />
-      <StatsBar label="Inteligência" value={alien.intelligence} color="#F39C12" />
-      <StatsBar label="Velocidade" value={alien.speed} color="#3498DB" />
-    </ThemedView>
 
-    <ThemedView style={styles.abilitiesSection}>
-      <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
-        Habilidades Principais:
-      </ThemedText>
-      {alien.abilities.map((ability, index) => (
-        <View key={index} style={styles.abilityItem}>
-          <View style={[styles.abilityIcon, { backgroundColor: alien.omnitrixColor }]} />
-          <ThemedText style={styles.abilityText}>{ability}</ThemedText>
+      <Image
+        source={{ uri: alien.image }}
+        style={styles.alienImage}
+        contentFit="contain"
+        transition={1000} />
+
+      <View style={styles.infoGrid}>
+        <View style={styles.infoItem}>
+          <ThemedText type="defaultSemiBold">Espécie:</ThemedText>
+          <ThemedText style={styles.infoText}>{alien.species}</ThemedText>
         </View>
-      ))}
-    </ThemedView>
+        <View style={styles.infoItem}>
+          <ThemedText type="defaultSemiBold">Planeta:</ThemedText>
+          <ThemedText style={styles.infoText}>{alien.homeWorld}</ThemedText>
+        </View>
+      </View>
 
-    <ThemedView style={styles.triviaBox}>
-      <ThemedText type="defaultSemiBold" style={styles.triviaTitle}>
-        🎯 Curiosidade:
+      <ThemedText style={styles.alienDescription}>
+        {alien.description}
       </ThemedText>
-      <ThemedText style={styles.triviaText}>{alien.trivia}</ThemedText>
-    </ThemedView>
 
-    <ThemedText style={styles.firstAppearance}>
-      📺 Primeira aparição: {alien.firstAppearance}
-    </ThemedText>
-  </ThemedView>
-);
+      <ThemedView style={styles.statsSection}>
+        <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+          Estatísticas:
+        </ThemedText>
+        <StatsBar label="Força" value={alien.powerLevel} color="#E74C3C" />
+        <StatsBar label="Inteligência" value={alien.intelligence} color="#F39C12" />
+        <StatsBar label="Velocidade" value={alien.speed} color="#3498DB" />
+      </ThemedView>
+
+      <ThemedView style={styles.abilitiesSection}>
+        <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+          Habilidades Principais:
+        </ThemedText>
+        {alien.abilities.map((ability, index) => (
+          <View key={index} style={styles.abilityItem}>
+            <View style={[styles.abilityIcon, { backgroundColor: alien.omnitrixColor }]} />
+            <ThemedText style={styles.abilityText}>{ability}</ThemedText>
+          </View>
+        ))}
+      </ThemedView>
+
+      <ThemedView style={styles.triviaBox}>
+        <ThemedText type="defaultSemiBold" style={styles.triviaTitle}>
+          🎯 Curiosidade:
+        </ThemedText>
+        <ThemedText style={styles.triviaText}>{alien.trivia}</ThemedText>
+      </ThemedView>
+
+      <ThemedText style={styles.firstAppearance}>
+        📺 Primeira aparição: {alien.firstAppearance}
+      </ThemedText>
+    </ThemedView>
+  );
+};
 
 // Componente de Categoria
 const AlienCategory = ({ title, aliens, emoji }) => (

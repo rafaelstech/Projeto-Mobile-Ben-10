@@ -57,6 +57,10 @@ export default function HomeScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Ben 10: Supremacia Alienígena</ThemedText>
       </ThemedView>
+      <Image
+          source={require('@/assets/images/ben 10 ultime alien 2.jpg')}
+          style={styles.headerImage}
+        />
 
       <ThemedView style={styles.stepContainer}>
         <ThemedText>
@@ -71,6 +75,10 @@ export default function HomeScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Ben 10: Omniverse</ThemedText>
       </ThemedView>
+      <Image
+          source={require('@/assets/images/ben 10 omniverse 2.jpg')}
+          style={styles.headerImage}
+        />
 
       <ThemedView style={styles.stepContainer}>
         <ThemedText>
@@ -84,6 +92,10 @@ export default function HomeScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Ben 10 (Reboot 2016)</ThemedText>
       </ThemedView>
+      <Image
+          source={require('@/assets/images/ben 10 reboot.png')}
+          style={styles.headerImage}
+        />
 
       <ThemedView style={styles.stepContainer}>
         <ThemedText>
@@ -93,11 +105,44 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
 
+      {/* ALIENÍGENAS ICÔNICOS */}
+      <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title"></ThemedText>
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        
+        <ThemedText>
+        </ThemedText>
+      </ThemedView>
+
+      {/* VILÕES MEMORÁVEIS */}
+      <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title"></ThemedText>
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText>
+          
+        </ThemedText>
+      </ThemedView>
+
+      {/* OMNI-TRANSFORMAÇÕES */}
+      <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title"></ThemedText>
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText>
+          
+        </ThemedText>
+      </ThemedView>
+
       {/* BOTÕES E INTERAÇÕES */}
       <ThemedView style={styles.stepContainer}>
         <Link href="/modal">
           <Link.Trigger>
-            <ThemedText type="subtitle">Saiba mais</ThemedText>
+            <ThemedText type="subtitle"></ThemedText>
           </Link.Trigger>
           <Link.Preview />
           <Link.Menu>
@@ -136,6 +181,7 @@ const styles = StyleSheet.create({
   stepContainer: {
     gap: 16,
     marginBottom: 24,
+    paddingHorizontal: 16,
   },
   headerImage: {
     height: 200,
@@ -146,4 +192,4 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 12,
   },
-});
+});   

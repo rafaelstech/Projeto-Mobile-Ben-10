@@ -1,3 +1,4 @@
+import React from 'react';
 import { Image } from 'expo-image';
 import { Platform, StyleSheet, View, ScrollView } from 'react-native';
 
@@ -9,8 +10,48 @@ import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Fonts } from '@/constants/theme';
 
+// Interfaces TypeScript
+interface Alien {
+  id: number;
+  name: string;
+  species: string;
+  homeWorld: string;
+  abilities: string[];
+  description: string;
+  image: string;
+  firstAppearance: string;
+  powerLevel: number;
+  intelligence: number;
+  speed: number;
+  omnitrixColor: string;
+  trivia: string;
+}
+
+interface Ben10AliensData {
+  originalSeries: Alien[];
+  alienForce: Alien[];
+  ultimateAliens: Alien[];
+}
+
+interface StatsBarProps {
+  label: string;
+  value: number;
+  max?: number;
+  color?: string;
+}
+
+interface AlienCardProps {
+  alien: Alien;
+}
+
+interface AlienCategoryProps {
+  title: string;
+  aliens: Alien[];
+  emoji: string;
+}
+
 // API de dados dos aliens de Ben 10 - Versão Expandida
-const ben10Aliens = {
+const ben10Aliens: Ben10AliensData = {
   originalSeries: [
     {
       id: 1,
@@ -155,7 +196,12 @@ const ben10Aliens = {
 };
 
 // Componente de Estatísticas
-const StatsBar = ({ label, value, max = 10, color = "#3498DB" }) => (
+const StatsBar: React.FC<StatsBarProps> = ({ 
+  label, 
+  value, 
+  max = 10, 
+  color = "#3498DB" 
+}) => (
   <View style={styles.statContainer}>
     <ThemedText style={styles.statLabel}>{label}</ThemedText>
     <View style={styles.statBarBackground}>
@@ -174,11 +220,45 @@ const StatsBar = ({ label, value, max = 10, color = "#3498DB" }) => (
 );
 
 // Componente para exibir cada alien
+<<<<<<< HEAD
 const AlienCard = ({ alien }) => {
   return (
     <ThemedView style={styles.alienCard}>
       <ThemedText type="title" style={styles.alienName}>
         {alien.name}
+=======
+const AlienCard: React.FC<AlienCardProps> = ({ alien }) => (
+  <ThemedView style={styles.alienCard}>
+    <ThemedText type="title" style={styles.alienName}>
+      {alien.name}
+    </ThemedText>
+    
+    <Image
+      source={{ uri: alien.image }}
+      style={styles.alienImage}
+      contentFit="contain"
+      transition={1000}
+    />
+    
+    <View style={styles.infoGrid}>
+      <View style={styles.infoItem}>
+        <ThemedText type="defaultSemiBold">Espécie:</ThemedText>
+        <ThemedText style={styles.infoText}>{alien.species}</ThemedText>
+      </View>
+      <View style={styles.infoItem}>
+        <ThemedText type="defaultSemiBold">Planeta:</ThemedText>
+        <ThemedText style={styles.infoText}>{alien.homeWorld}</ThemedText>
+      </View>
+    </View>
+
+    <ThemedText style={styles.alienDescription}>
+      {alien.description}
+    </ThemedText>
+
+    <ThemedView style={styles.statsSection}>
+      <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+        Estatísticas:
+>>>>>>> e0da53db533b8bb3fffcb04f0cd6eba2e07fb368
       </ThemedText>
 
       <Image
@@ -238,9 +318,13 @@ const AlienCard = ({ alien }) => {
 };
 
 // Componente de Categoria
-const AlienCategory = ({ title, aliens, emoji }) => (
+const AlienCategory: React.FC<AlienCategoryProps> = ({ title, aliens, emoji }) => (
   <Collapsible title={`${emoji} ${title}`}>
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
+    <ScrollView 
+      horizontal 
+      showsHorizontalScrollIndicator={false} 
+      style={styles.horizontalScroll}
+    >
       {aliens.map((alien) => (
         <View key={alien.id} style={styles.horizontalCard}>
           <AlienCard alien={alien} />
@@ -250,7 +334,11 @@ const AlienCategory = ({ title, aliens, emoji }) => (
   </Collapsible>
 );
 
-export default function TabTwoScreen() {
+const TabTwoScreen: React.FC = () => {
+  const totalAliens = ben10Aliens.originalSeries.length + 
+                     ben10Aliens.alienForce.length + 
+                     ben10Aliens.ultimateAliens.length;
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#1a1a2e', dark: '#0f3460' }}
@@ -275,7 +363,7 @@ export default function TabTwoScreen() {
         
         <ThemedView style={styles.omnitrixInfo}>
           <ThemedText style={styles.omnitrixText}>
-            📊 Total de Aliens: {ben10Aliens.originalSeries.length + ben10Aliens.alienForce.length + ben10Aliens.ultimateAliens.length}
+            📊 Total de Aliens: {totalAliens}
           </ThemedText>
           <ThemedText style={styles.omnitrixText}>
             🌍 Planetas Representados: 8
@@ -335,7 +423,7 @@ export default function TabTwoScreen() {
 
     </ParallaxScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   headerImage: {
@@ -512,3 +600,5 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
 });
+
+export default TabTwoScreen;

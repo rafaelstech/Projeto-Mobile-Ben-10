@@ -12,19 +12,19 @@ export default function HomeScreen() {
       headerBackgroundColor={{ light: '#7FFF00', dark: '#7FFF00' }}
       headerImage={
         <Image
-          source={require('@/assets/images/Ben 10 classico.jpg')}
+          source={require('@/assets/images/ben10 wallpaper.png')}
           style={styles.headerImage}
         />
       }>
 
       {/* BEN 10 CLÁSSICO */}
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Ben 10 Clássico</ThemedText>
+        <ThemedText type="title" style={styles.greenTitle}>Ben 10 Clássico</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
         <Image
-          source={require('@/assets/images/Ben 10 classico.jpg')}
+          source={require('@/assets/images/ben 10 wallpaper.jpg')}
           style={styles.contentImage}
         />
         <ThemedText>
@@ -37,12 +37,12 @@ export default function HomeScreen() {
 
       {/* FORÇA ALIENÍGENA */}
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Ben 10: Força Alienígena</ThemedText>
+        <ThemedText type="title" style={styles.greenTitle}>Ben 10: Força Alienígena</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
         <Image
-          source={require('@/assets/images/Ben 10 alien force.jpg')}
+          source={require('@/assets/images/ben 10 força do alienigena.jpg')}
           style={styles.contentImage}
         />
         <ThemedText>
@@ -55,11 +55,11 @@ export default function HomeScreen() {
 
       {/* SUPREMACIA ALIENÍGENA */}
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Ben 10: Supremacia Alienígena</ThemedText>
+        <ThemedText type="title" style={styles.greenTitle}>Ben 10: Supremacia Alienígena</ThemedText>
       </ThemedView>
       <Image
           source={require('@/assets/images/ben 10 ultime alien 2.jpg')}
-          style={styles.headerImage}
+          style={styles.contentImage}
         />
 
       <ThemedView style={styles.stepContainer}>
@@ -73,11 +73,11 @@ export default function HomeScreen() {
 
       {/* OMNIVERSE */}
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Ben 10: Omniverse</ThemedText>
+        <ThemedText type="title" style={styles.greenTitle}>Ben 10: Omniverse</ThemedText>
       </ThemedView>
       <Image
           source={require('@/assets/images/ben 10 omniverse 2.jpg')}
-          style={styles.headerImage}
+          style={styles.contentImage}
         />
 
       <ThemedView style={styles.stepContainer}>
@@ -90,11 +90,11 @@ export default function HomeScreen() {
 
       {/* REBOOT */}
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Ben 10 (Reboot 2016)</ThemedText>
+        <ThemedText type="title" style={styles.greenTitle}>Ben 10 (Reboot 2016)</ThemedText>
       </ThemedView>
       <Image
           source={require('@/assets/images/ben 10 reboot.png')}
-          style={styles.headerImage}
+          style={styles.contentImage}
         />
 
       <ThemedView style={styles.stepContainer}>
@@ -105,68 +105,6 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
 
-      {/* ALIENÍGENAS ICÔNICOS */}
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title"></ThemedText>
-      </ThemedView>
-
-      <ThemedView style={styles.stepContainer}>
-        
-        <ThemedText>
-        </ThemedText>
-      </ThemedView>
-
-      {/* VILÕES MEMORÁVEIS */}
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title"></ThemedText>
-      </ThemedView>
-
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText>
-          
-        </ThemedText>
-      </ThemedView>
-
-      {/* OMNI-TRANSFORMAÇÕES */}
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title"></ThemedText>
-      </ThemedView>
-
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText>
-          
-        </ThemedText>
-      </ThemedView>
-
-      {/* BOTÕES E INTERAÇÕES */}
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle"></ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction
-              title="Favoritar"
-              icon="star"
-              onPress={() => alert('Adicionado aos favoritos!')}
-            />
-            <Link.MenuAction
-              title="Compartilhar"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Link compartilhado!')}
-            />
-            <Link.Menu title="Mais opções" icon="ellipsis">
-              <Link.MenuAction
-                title="Excluir"
-                icon="trash"
-                destructive
-                onPress={() => alert('Item excluído!')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
-      </ThemedView>
     </ParallaxScrollView>
   );
 }
@@ -184,7 +122,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   headerImage: {
-    height: 200,
+    height: 250,
     width: '100%',
   },
   contentImage: {
@@ -192,4 +130,8 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 12,
   },
-});   
+  greenTitle: {
+    color: '#008000',
+    fontWeight: 'bold',
+  },
+});

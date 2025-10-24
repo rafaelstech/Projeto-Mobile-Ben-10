@@ -1,569 +1,765 @@
-import React from 'react';
-import { Image } from 'expo-image';
-import { Platform, StyleSheet, View, ScrollView } from 'react-native';
-
-import { Collapsible } from '@/components/ui/collapsible';
-import { ExternalLink } from '@/components/external-link';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Fonts } from '@/constants/theme';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState } from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 // Interfaces TypeScript
+interface AlienAbility {
+  name: string;
+  description: string;
+  type: 'offensive' | 'defensive' | 'utility' | 'movement';
+  powerCost: number;
+}
+
 interface Alien {
   id: number;
   name: string;
   species: string;
   homeWorld: string;
-  abilities: string[];
+  abilities: AlienAbility[];
   description: string;
   image: string;
   firstAppearance: string;
-  powerLevel: number;
-  intelligence: number;
-  speed: number;
+  series: 'classic' | 'alien-force' | 'ultimate-alien' | 'omniverse';
+  stats: {
+    power: number;
+    intelligence: number;
+    speed: number;
+    durability: number;
+    versatility: number;
+  };
   omnitrixColor: string;
-  trivia: string;
+  trivia: string[];
+  weaknesses: string[];
+  transformations: string[];
 }
 
-interface Ben10AliensData {
-  originalSeries: Alien[];
-  alienForce: Alien[];
-  ultimateAliens: Alien[];
-}
-
-interface StatsBarProps {
-  label: string;
-  value: number;
-  max?: number;
-  color?: string;
-}
-
-interface AlienCardProps {
-  alien: Alien;
-}
-
-interface AlienCategoryProps {
-  title: string;
-  aliens: Alien[];
-  emoji: string;
-}
-
-// API de dados dos aliens de Ben 10 - Versão Expandida
-const ben10Aliens: Ben10AliensData = {
-  originalSeries: [
-    {
-      id: 1,
-      name: "Heatblast",
-      species: "Pyronite",
-      homeWorld: "Pyros",
-      abilities: ["Pirocinese", "Voo propulsivo", "Manipulação de lava", "Resistência extrema ao calor"],
-      description: "Um ser de plasma vivo composto de rocha metamórfica e magma. Pode gerar e controlar chamas a 1.000.000°C.",
-      image: "https://static.wikia.nocookie.net/ben10/images/7/7c/Heatblast_OS.png",
-      firstAppearance: "S01E01 - E Então Eram 10",
-      powerLevel: 9,
+// Dados dos aliens
+const ben10Aliens: Alien[] = [
+  {
+    id: 1,
+    name: "Heatblast",
+    species: "Pyronite",
+    homeWorld: "Pyros",
+    abilities: [
+      {
+        name: "Pirocinese",
+        description: "Controle de fogo e calor",
+        type: "offensive",
+        powerCost: 8
+      },
+      {
+        name: "Voo Propulsivo",
+        description: "Voo através de jatos de fogo",
+        type: "movement",
+        powerCost: 6
+      }
+    ],
+    description: "Ser de plasma vivo composto de rocha metamórfica e magma. Pode gerar e controlar chamas extremamente quentes.",
+    image: "fire",
+    firstAppearance: "S01E01 - E Então Eram 10",
+    series: "classic",
+    stats: {
+      power: 9,
       intelligence: 6,
       speed: 7,
-      omnitrixColor: "#FF6B35",
-      trivia: "Heatblast tem medo de água e pode ser extinto por líquidos."
+      durability: 8,
+      versatility: 7
     },
-    {
-      id: 2,
-      name: "Four Arms",
-      species: "Tetramand",
-      homeWorld: "Khoros",
-      abilities: ["Super força", "Quatro braços", "Durabilidade sobre-humana", "Especialista em combate"],
-      description: "Um guerreiro tetramand com força suficiente para levantar 100 toneladas. Cada braço pode operar independentemente.",
-      image: "https://static.wikia.nocookie.net/ben10/images/4/4a/Four_Arms_OS.png",
-      firstAppearance: "S01E01 - E Então Eram 10",
-      powerLevel: 10,
+    omnitrixColor: "#27AE60",
+    trivia: [
+      "Tem medo de água",
+      "Vive em planetas vulcânicos",
+      "Sobrevive no vácuo do espaço"
+    ],
+    weaknesses: ["Água", "Ambientes frios"],
+    transformations: ["Heatblast → Swampfire"]
+  },
+  {
+    id: 2,
+    name: "Four Arms",
+    species: "Tetramand",
+    homeWorld: "Khoros",
+    abilities: [
+      {
+        name: "Super Força",
+        description: "Capaz de levantar 100 toneladas",
+        type: "offensive",
+        powerCost: 9
+      },
+      {
+        name: "Multibraços",
+        description: "Quatro braços independentes",
+        type: "utility",
+        powerCost: 5
+      }
+    ],
+    description: "Guerreiro tetramand com força colossal. Cada braço opera independentemente para combates múltiplos.",
+    image: "body",
+    firstAppearance: "S01E01 - E Então Eram 10",
+    series: "classic",
+    stats: {
+      power: 10,
       intelligence: 5,
       speed: 6,
-      omnitrixColor: "#E74C3C",
-      trivia: "Tetramands têm uma cultura baseada em honra e força física."
+      durability: 9,
+      versatility: 6
     },
-    {
-      id: 3,
-      name: "Diamondhead",
-      species: "Petrosapien",
-      homeWorld: "Petropia",
-      abilities: ["Corpo de diamante", "Cristocinese", "Regeneração completa", "Projeção de cristais"],
-      description: "Ser vivo composto de cristal orgânico ultra-resistente. Pode criar estruturas de cristal e se regenerar de danos.",
-      image: "https://static.wikia.nocookie.net/ben10/images/3/3c/Diamondhead_OS.png",
-      firstAppearance: "S01E01 - E Então Eram 10",
-      powerLevel: 8,
-      intelligence: 7,
-      speed: 5,
-      omnitrixColor: "#1ABC9C",
-      trivia: "Diamondhead é um dos poucos aliens que aparecem em todas as séries de Ben 10."
-    },
-    {
-      id: 4,
-      name: "XLR8",
-      species: "Kineceleran",
-      homeWorld: "Kinet",
-      abilities: ["Super velocidade", "Garras retráteis", "Visão temporal lenta", "Aerodinâmica natural"],
-      description: "Pode correr a 888 km/h. Sua visão processa informações em câmera lenta, permitindo navegar em alta velocidade.",
-      image: "https://static.wikia.nocookie.net/ben10/images/5/5d/XLR8_OS.png",
-      firstAppearance: "S01E01 - E Então Eram 10",
-      powerLevel: 6,
+    omnitrixColor: "#2ECC71",
+    trivia: [
+      "Cultura baseada em honra",
+      "Vivem até 400 anos",
+      "Sociedade matriarcal"
+    ],
+    weaknesses: ["Ataques à distância", "Oponentes ágeis"],
+    transformations: ["Four Arms → Humungousaur"]
+  },
+  {
+    id: 3,
+    name: "XLR8",
+    species: "Kineceleran",
+    homeWorld: "Kinet",
+    abilities: [
+      {
+        name: "Super Velocidade",
+        description: "Pode correr a 888 km/h",
+        type: "movement",
+        powerCost: 8
+      },
+      {
+        name: "Visão Acelerada",
+        description: "Percepção em câmera lenta",
+        type: "utility",
+        powerCost: 3
+      }
+    ],
+    description: "Velocista alienígena que processa o mundo em câmera lenta. Navega em alta velocidade com precisão.",
+    image: "flash",
+    firstAppearance: "S01E01 - E Então Eram 10",
+    series: "classic",
+    stats: {
+      power: 6,
       intelligence: 7,
       speed: 10,
-      omnitrixColor: "#3498DB",
-      trivia: "Kinecelerans vivem apenas 1 ano terrestre devido à sua percepção temporal acelerada."
+      durability: 5,
+      versatility: 8
     },
-    {
-      id: 5,
-      name: "Ghostfreak",
-      species: "Ectonurite",
-      homeWorld: "Anur Phaetos",
-      abilities: ["Invisibilidade", "Intangibilidade", "Possessão corporal", "Voo", "Telepatia"],
-      description: "Um Ectonurite com consciência própria. Pode atravessar matéria e controlar outros seres.",
-      image: "https://static.wikia.nocookie.net/ben10/images/9/9f/Ghostfreak_OS.png",
-      firstAppearance: "S01E02 - Washington D.C. em Perigo",
-      powerLevel: 8,
-      intelligence: 9,
-      speed: 8,
-      omnitrixColor: "#8E44AD",
-      trivia: "Ghostfreak foi o primeiro alien a desenvolver consciência própria dentro do Omnitrix."
-    }
-  ],
-  alienForce: [
-    {
-      id: 6,
-      name: "Swampfire",
-      species: "Methanosian",
-      homeWorld: "Methanos",
-      abilities: ["Controle de plantas", "Pirocinese", "Regeneração", "Manipulação de gases"],
-      description: "Combinação de Heatblast e Wildvine. Pode criar explosões de metano e controlar flora.",
-      image: "https://static.wikia.nocookie.net/ben10/images/4/47/Swampfire_UA.png",
-      firstAppearance: "S01E01 - Ben 10 Returns",
-      powerLevel: 9,
+    omnitrixColor: "#1ABC9C",
+    trivia: [
+      "Vivem apenas 1 ano terrestre",
+      "Planeta orbita buraco negro",
+      "Amadurecem em semanas"
+    ],
+    weaknesses: ["Superfícies escorregadias", "Armadilhas"],
+    transformations: ["XLR8 → Fasttrack"]
+  },
+  {
+    id: 4,
+    name: "Diamondhead",
+    species: "Petrosapien",
+    homeWorld: "Petropia",
+    abilities: [
+      {
+        name: "Corpo de Cristal",
+        description: "Estrutura de diamante orgânico",
+        type: "defensive",
+        powerCost: 5
+      },
+      {
+        name: "Cristocinese",
+        description: "Manipulação de cristais",
+        type: "utility",
+        powerCost: 7
+      }
+    ],
+    description: "Ser de cristal orgânico com regeneração completa e controle sobre estruturas cristalinas.",
+    image: "diamond",
+    firstAppearance: "S01E01 - E Então Eram 10",
+    series: "classic",
+    stats: {
+      power: 8,
       intelligence: 7,
       speed: 5,
-      omnitrixColor: "#27AE60",
-      trivia: "Swampfire substituiu Heatblast como o alien de fogo principal em Alien Force."
+      durability: 10,
+      versatility: 8
     },
-    {
-      id: 7,
-      name: "Humungousaur",
-      species: "Vaxasaurian",
-      homeWorld: "Terradino",
-      abilities: ["Força sobre-humana", "Crescimento corporal", "Durabilidade extrema", "Cauda poderosa"],
-      description: "Pode crescer de 3.6m para 12m de altura. Sua força aumenta proporcionalmente ao tamanho.",
-      image: "https://static.wikia.nocookie.net/ben10/images/0/0c/Humungousaur_UA.png",
-      firstAppearance: "S01E01 - Ben 10 Returns",
-      powerLevel: 10,
+    omnitrixColor: "#16A085",
+    trivia: [
+      "Presente em todas as séries",
+      "Quase extinto por Vilgax",
+      "Cristais conduzem energia"
+    ],
+    weaknesses: ["Sônicos", "Vibrações específicas"],
+    transformations: ["Diamondhead → Chromastone"]
+  },
+  {
+    id: 5,
+    name: "Swampfire",
+    species: "Methanosian",
+    homeWorld: "Methanos",
+    abilities: [
+      {
+        name: "Controle de Plantas",
+        description: "Manipulação de flora",
+        type: "utility",
+        powerCost: 6
+      },
+      {
+        name: "Pirocinese",
+        description: "Controle de chamas verdes",
+        type: "offensive",
+        powerCost: 7
+      }
+    ],
+    description: "Híbrido com controle de plantas e fogo. Regeneração através de fotossíntese.",
+    image: "leaf",
+    firstAppearance: "Alien Force S01E01",
+    series: "alien-force",
+    stats: {
+      power: 9,
+      intelligence: 7,
+      speed: 5,
+      durability: 8,
+      versatility: 9
+    },
+    omnitrixColor: "#27AE60",
+    trivia: [
+      "Substituiu Heatblast",
+      "Faz fotossíntese",
+      "Atrai insetos"
+    ],
+    weaknesses: ["Herbicidas", "Temperaturas extremas"],
+    transformations: ["Swampfire → Heatblast"]
+  },
+  {
+    id: 6,
+    name: "Humungousaur",
+    species: "Vaxasaurian",
+    homeWorld: "Terradino",
+    abilities: [
+      {
+        name: "Crescimento",
+        description: "Cresce de 3.6m para 12m",
+        type: "offensive",
+        powerCost: 9
+      },
+      {
+        name: "Força Titânica",
+        description: "Levanta 900 toneladas",
+        type: "offensive",
+        powerCost: 10
+      }
+    ],
+    description: "Colosso que aumenta de tamanho e força. Poder máximo no modo gigante.",
+    image: "fitness",
+    firstAppearance: "Alien Force S01E01",
+    series: "alien-force",
+    stats: {
+      power: 10,
       intelligence: 5,
       speed: 4,
-      omnitrixColor: "#E67E22",
-      trivia: "Humungousaur pode levantar até 900 toneladas em seu tamanho máximo."
+      durability: 9,
+      versatility: 6
     },
-    {
-      id: 8,
-      name: "Big Chill",
-      species: "Necrofriggian",
-      homeWorld: "Kylmyys",
-      abilities: ["Criocinese", "Voo", "Intangibilidade", "Respiração de gelo"],
-      description: "Ser de temperatura absoluta que pode congelar qualquer coisa e atravessar matéria sólida.",
-      image: "https://static.wikia.nocookie.net/ben10/images/7/7c/Big_Chill_UA.png",
-      firstAppearance: "S01E01 - Ben 10 Returns",
-      powerLevel: 8,
-      intelligence: 7,
-      speed: 8,
-      omnitrixColor: "#2980B9",
-      trivia: "Necrofriggians são hermafroditas e podem botar até 28 ovos de uma vez."
-    }
-  ],
-  ultimateAliens: [
-    {
-      id: 9,
-      name: "Ultimate Humungousaur",
-      species: "Vaxasaurian (Evoluído)",
-      homeWorld: "Terradino",
-      abilities: ["Força máxima", "Projéteis ósseos", "Durabilidade absoluta", "Metralhadora de espinhos"],
-      description: "Versão evoluída do Humungousaur após simulação de 1 milhão de anos de guerra. Desenvolveu projéteis ósseos.",
-      image: "https://static.wikia.nocookie.net/ben10/images/7/7e/Ultimate_Humungousaur_UA.png",
-      firstAppearance: "S02E12 - The Ultimate Sacrifice",
-      powerLevel: 12,
-      intelligence: 6,
-      speed: 5,
-      omnitrixColor: "#C0392B",
-      trivia: "O Modo Ultimate foi criado pelo Omnitrix simulando condições de guerra extrema."
-    }
-  ]
-};
+    omnitrixColor: "#2ECC71",
+    trivia: [
+      "Levanta 900 toneladas",
+      "Inspirado em dinossauros",
+      "Espécie pacífica"
+    ],
+    weaknesses: ["Espaços pequenos", "Ataques precisos"],
+    transformations: ["Humungousaur → Four Arms"]
+  }
+];
 
-// Componente de Estatísticas
-const StatsBar: React.FC<StatsBarProps> = ({ 
+// Componente de Barra de Estatística Simples
+const StatBar: React.FC<{ label: string; value: number }> = ({ 
   label, 
-  value, 
-  max = 10, 
-  color = "#3498DB" 
+  value
 }) => (
-  <View style={styles.statContainer}>
-    <ThemedText style={styles.statLabel}>{label}</ThemedText>
+  <View style={styles.statBarContainer}>
+    <Text style={styles.statBarLabel}>{label}</Text>
     <View style={styles.statBarBackground}>
       <View 
         style={[
           styles.statBarFill, 
-          { 
-            width: `${(value / max) * 100}%`,
-            backgroundColor: color
-          }
+          { width: `${(value / 10) * 100}%` }
         ]} 
       />
     </View>
-    <ThemedText style={styles.statValue}>{value}/{max}</ThemedText>
+    <Text style={styles.statBarValue}>{value}/10</Text>
   </View>
 );
 
-// Componente para exibir cada alien
-const AlienCard: React.FC<AlienCardProps> = ({ alien }) => (
-  <ThemedView style={styles.alienCard}>
-    <ThemedText type="title" style={styles.alienName}>
-      {alien.name}
-    </ThemedText>
-    
-    <Image
-      source={{ uri: alien.image }}
-      style={styles.alienImage}
-      contentFit="contain"
-      transition={1000}
-    />
-    
-    <View style={styles.infoGrid}>
-      <View style={styles.infoItem}>
-        <ThemedText type="defaultSemiBold">Espécie:</ThemedText>
-        <ThemedText style={styles.infoText}>{alien.species}</ThemedText>
-      </View>
-      <View style={styles.infoItem}>
-        <ThemedText type="defaultSemiBold">Planeta:</ThemedText>
-        <ThemedText style={styles.infoText}>{alien.homeWorld}</ThemedText>
-      </View>
-    </View>
-
-    <ThemedText style={styles.alienDescription}>
-      {alien.description}
-    </ThemedText>
-
-    <ThemedView style={styles.statsSection}>
-      <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
-        Estatísticas:
-      </ThemedText>
-      <StatsBar label="Força" value={alien.powerLevel} color="#E74C3C" />
-      <StatsBar label="Inteligência" value={alien.intelligence} color="#F39C12" />
-      <StatsBar label="Velocidade" value={alien.speed} color="#3498DB" />
-    </ThemedView>
-
-    <ThemedView style={styles.abilitiesSection}>
-      <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
-        Habilidades Principais:
-      </ThemedText>
-      {alien.abilities.map((ability, index) => (
-        <View key={index} style={styles.abilityItem}>
-          <View style={[styles.abilityIcon, { backgroundColor: alien.omnitrixColor }]} />
-          <ThemedText style={styles.abilityText}>{ability}</ThemedText>
-        </View>
-      ))}
-    </ThemedView>
-
-    <ThemedView style={styles.triviaBox}>
-      <ThemedText type="defaultSemiBold" style={styles.triviaTitle}>
-        🎯 Curiosidade:
-      </ThemedText>
-      <ThemedText style={styles.triviaText}>{alien.trivia}</ThemedText>
-    </ThemedView>
-
-    <ThemedText style={styles.firstAppearance}>
-      📺 Primeira aparição: {alien.firstAppearance}
-    </ThemedText>
-  </ThemedView>
-);
-
-// Componente de Categoria
-const AlienCategory: React.FC<AlienCategoryProps> = ({ title, aliens, emoji }) => (
-  <Collapsible title={`${emoji} ${title}`}>
-    <ScrollView 
-      horizontal 
-      showsHorizontalScrollIndicator={false} 
-      style={styles.horizontalScroll}
-    >
-      {aliens.map((alien) => (
-        <View key={alien.id} style={styles.horizontalCard}>
-          <AlienCard alien={alien} />
-        </View>
-      ))}
-    </ScrollView>
-  </Collapsible>
-);
-
-const TabTwoScreen: React.FC = () => {
-  const totalAliens = ben10Aliens.originalSeries.length + 
-                     ben10Aliens.alienForce.length + 
-                     ben10Aliens.ultimateAliens.length;
+// Componente de Ícone Alien Simples
+const AlienIcon: React.FC<{ type: string; size?: number }> = ({ 
+  type, 
+  size = 70 
+}) => {
+  const getIconName = () => {
+    switch (type) {
+      case 'fire': return 'flame';
+      case 'body': return 'accessibility';
+      case 'flash': return 'flash';
+      case 'diamond': return 'diamond';
+      case 'leaf': return 'leaf';
+      case 'fitness': return 'barbell';
+      default: return 'help';
+    }
+  };
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#1a1a2e', dark: '#0f3460' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#00D4FF"
-          name="atom"
-          style={styles.headerImage}
-        />
-      }>
-      
-      <ThemedView style={styles.heroSection}>
-        <ThemedText
-          type="title"
-          style={styles.mainTitle}>
-          🚀 Omnitrix Database
-        </ThemedText>
-        <ThemedText style={styles.subtitle}>
-          Explore todos os aliens do universo Ben 10
-        </ThemedText>
-        
-        <ThemedView style={styles.omnitrixInfo}>
-          <ThemedText style={styles.omnitrixText}>
-            📊 Total de Aliens: {totalAliens}
-          </ThemedText>
-          <ThemedText style={styles.omnitrixText}>
-            🌍 Planetas Representados: 8
-          </ThemedText>
-        </ThemedView>
-      </ThemedView>
-
-      <AlienCategory 
-        title="Série Original" 
-        aliens={ben10Aliens.originalSeries} 
-        emoji="🎬"
+    <View style={[styles.alienIconContainer, { width: size, height: size }]}>
+      <Ionicons 
+        name={getIconName()} 
+        size={size * 0.6} 
+        color="#27AE60" 
       />
-
-      <AlienCategory 
-        title="Alien Force" 
-        aliens={ben10Aliens.alienForce} 
-        emoji="⚡"
-      />
-
-      <AlienCategory 
-        title="Ultimate Aliens" 
-        aliens={ben10Aliens.ultimateAliens} 
-        emoji="💎"
-      />
-
-      <Collapsible title="📚 Sobre o Omnitrix">
-        <ThemedView style={styles.infoBox}>
-          <ThemedText style={styles.infoText}>
-            O Omnitrix é um dispositivo galáctico criado por Azmuth, o ser mais inteligente de 3 galáxias. 
-            Ele contém o DNA de mais de 1.000.000 espécies alienígenas.
-          </ThemedText>
-          <ThemedText style={styles.featureList}>
-            • Funciona como uma arma de paz universal{'\n'}
-            • Possui modo de segurança integrado{'\n'}
-            • Recalibração automática{'\n'}
-            • Sincronização com o portador
-          </ThemedText>
-          <ExternalLink href="https://ben10.fandom.com/wiki/Omnitrix">
-            <ThemedText type="link">🔍 Explorar Wiki Oficial</ThemedText>
-          </ExternalLink>
-        </ThemedView>
-      </Collapsible>
-
-      <Collapsible title="🌌 Universo Expandido">
-        <ThemedView style={styles.infoBox}>
-          <ThemedText style={styles.infoText}>
-            Ben 10 expandiu-se para múltiplas séries, filmes e videogames, criando um dos universos mais ricos da Cartoon Network.
-          </ThemedText>
-          <ThemedText type="defaultSemiBold" style={styles.seriesList}>
-            Série Original → Alien Force → Ultimate Alien → Omniverse → Reboot
-          </ThemedText>
-          <ExternalLink href="https://ben10.fandom.com/wiki/Ben_10_Wiki">
-            <ThemedText type="link">📖 Acessar Database Completa</ThemedText>
-          </ExternalLink>
-        </ThemedView>
-      </Collapsible>
-
-    </ParallaxScrollView>
+    </View>
   );
 };
 
+// Componente de Card de Alien Simples
+const AlienCard: React.FC<{ alien: Alien }> = ({ alien }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <View style={styles.alienCard}>
+      {/* Header do Card */}
+      <View style={styles.cardHeader}>
+        <View style={styles.nameSection}>
+          <Text style={styles.alienName}>{alien.name}</Text>
+          <View style={styles.seriesTag}>
+            <Text style={styles.seriesText}>
+              {alien.series === 'classic' ? 'Clássico' : 'Alien Force'}
+            </Text>
+          </View>
+        </View>
+        
+        <TouchableOpacity onPress={() => setExpanded(!expanded)} style={styles.expandButton}>
+          <Ionicons 
+            name={expanded ? "chevron-up" : "chevron-down"} 
+            size={20} 
+            color="#27AE60" 
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* Informações Básicas */}
+      <View style={styles.alienInfo}>
+        <AlienIcon type={alien.image} />
+        
+        <View style={styles.basicInfo}>
+          <View style={styles.infoRow}>
+            <Ionicons name="planet" size={16} color="#27AE60" />
+            <Text style={styles.infoText}>{alien.species}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Ionicons name="location" size={16} color="#27AE60" />
+            <Text style={styles.infoText}>{alien.homeWorld}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Ionicons name="tv" size={16} color="#27AE60" />
+            <Text style={styles.infoText}>{alien.firstAppearance}</Text>
+          </View>
+        </View>
+      </View>
+
+      <Text style={styles.alienDescription}>{alien.description}</Text>
+
+      {expanded && (
+        <View style={styles.expandedContent}>
+          {/* Estatísticas */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Estatísticas</Text>
+            <View style={styles.statsGrid}>
+              <StatBar label="Força" value={alien.stats.power} />
+              <StatBar label="Inteligência" value={alien.stats.intelligence} />
+              <StatBar label="Velocidade" value={alien.stats.speed} />
+              <StatBar label="Durabilidade" value={alien.stats.durability} />
+              <StatBar label="Versatilidade" value={alien.stats.versatility} />
+            </View>
+          </View>
+
+          {/* Habilidades */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Habilidades</Text>
+            {alien.abilities.map((ability, index) => (
+              <View key={index} style={styles.abilityItem}>
+                <View style={styles.abilityHeader}>
+                  <Text style={styles.abilityName}>{ability.name}</Text>
+                  <View style={styles.powerCost}>
+                    <Text style={styles.powerCostText}>{ability.powerCost}</Text>
+                  </View>
+                </View>
+                <Text style={styles.abilityDescription}>{ability.description}</Text>
+              </View>
+            ))}
+          </View>
+
+          {/* Curiosidades */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Curiosidades</Text>
+            {alien.trivia.map((item, index) => (
+              <View key={index} style={styles.triviaItem}>
+                <Ionicons name="star" size={14} color="#27AE60" />
+                <Text style={styles.triviaText}>{item}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
+    </View>
+  );
+};
+
+// Componente Principal Simples
+const Ben10AlienDatabase: React.FC = () => {
+  const [selectedSeries, setSelectedSeries] = useState<'all' | Alien['series']>('all');
+
+  const filteredAliens = selectedSeries === 'all' 
+    ? ben10Aliens 
+    : ben10Aliens.filter(alien => alien.series === selectedSeries);
+
+  return (
+    <View style={styles.container}>
+      {/* Header Simples */}
+      <View style={styles.header}>
+        <View style={styles.titleSection}>
+          <Ionicons name="infinite" size={32} color="#27AE60" />
+          <View>
+            <Text style={styles.mainTitle}>Omnitrix Database</Text>
+            <Text style={styles.subtitle}>Catálogo de Aliens</Text>
+          </View>
+        </View>
+        
+        <View style={styles.statsContainer}>
+          <View style={styles.statItem}>
+            <Text style={styles.statNumber}>{ben10Aliens.length}</Text>
+            <Text style={styles.statLabel}>Aliens</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statNumber}>6</Text>
+            <Text style={styles.statLabel}>Planetas</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Filtros Simples */}
+      <View style={styles.filterContainer}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.filterContent}>
+            {(['all', 'classic', 'alien-force'] as const).map((series) => (
+              <TouchableOpacity
+                key={series}
+                style={[
+                  styles.filterButton,
+                  selectedSeries === series && styles.filterButtonActive
+                ]}
+                onPress={() => setSelectedSeries(series)}
+              >
+                <Text style={[
+                  styles.filterButtonText,
+                  selectedSeries === series && styles.filterButtonTextActive
+                ]}>
+                  {series === 'all' ? 'Todos' :
+                   series === 'classic' ? 'Clássico' : 'Alien Force'}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+
+      {/* Lista de Aliens */}
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {filteredAliens.map((alien) => (
+          <AlienCard key={alien.id} alien={alien} />
+        ))}
+        
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Toque em um alien para detalhes</Text>
+        </View>
+      </ScrollView>
+    </View>
+  );
+};
+
+// Estilos Simples e Verdes
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#00D4FF',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-    opacity: 0.8,
+  container: {
+    flex: 1,
+    backgroundColor: '#f8fff8',
   },
-  heroSection: {
+  header: {
+    paddingTop: 60,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E8F5E8',
+  },
+  titleSection: {
+    flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   mainTitle: {
-    fontSize: 28,
-    textAlign: 'center',
-    marginBottom: 8,
-    color: '#00D4FF',
-    fontFamily: Fonts.rounded,
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#27AE60',
+    marginLeft: 10,
   },
   subtitle: {
-    textAlign: 'center',
-    fontSize: 16,
-    opacity: 0.9,
-    marginBottom: 15,
-  },
-  omnitrixInfo: {
-    backgroundColor: 'rgba(0, 212, 255, 0.1)',
-    padding: 15,
-    borderRadius: 12,
-    width: '100%',
-  },
-  omnitrixText: {
-    textAlign: 'center',
     fontSize: 14,
-    marginBottom: 5,
+    color: '#666666',
+    marginLeft: 10,
+    marginTop: 2,
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statNumber: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#27AE60',
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#666666',
+    marginTop: 4,
+  },
+  filterContainer: {
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E8F5E8',
+  },
+  filterContent: {
+    flexDirection: 'row',
+    paddingHorizontal: 15,
+  },
+  filterButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: '#F0F9F0',
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: '#E8F5E8',
+  },
+  filterButtonActive: {
+    backgroundColor: '#27AE60',
+    borderColor: '#27AE60',
+  },
+  filterButtonText: {
+    color: '#27AE60',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  filterButtonTextActive: {
+    color: '#FFFFFF',
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: '#f8fff8',
+  },
+  scrollContent: {
+    padding: 15,
   },
   alienCard: {
-    padding: 20,
-    marginVertical: 8,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: 'rgba(0, 212, 255, 0.3)',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    width: 350,
-  },
-  alienName: {
-    fontSize: 24,
-    textAlign: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
     marginBottom: 15,
-    color: '#00D4FF',
-    fontWeight: 'bold',
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    borderLeftWidth: 4,
+    borderLeftColor: '#27AE60',
   },
-  alienImage: {
-    width: 200,
-    height: 200,
-    alignSelf: 'center',
-    marginBottom: 15,
-  },
-  infoGrid: {
+  cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15,
+    alignItems: 'flex-start',
+    marginBottom: 12,
   },
-  infoItem: {
+  nameSection: {
     flex: 1,
   },
+  alienName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 6,
+  },
+  seriesTag: {
+    backgroundColor: '#E8F5E8',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+  },
+  seriesText: {
+    fontSize: 12,
+    color: '#27AE60',
+    fontWeight: '600',
+  },
+  expandButton: {
+    padding: 4,
+  },
+  alienInfo: {
+    flexDirection: 'row',
+    marginBottom: 12,
+    alignItems: 'center',
+  },
+  alienIconContainer: {
+    backgroundColor: '#F0F9F0',
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#E8F5E8',
+  },
+  basicInfo: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
   infoText: {
+    color: '#666666',
+    marginLeft: 8,
     fontSize: 14,
-    opacity: 0.9,
   },
   alienDescription: {
+    color: '#666666',
     fontSize: 14,
-    marginBottom: 15,
     lineHeight: 20,
-    textAlign: 'justify',
+    marginBottom: 12,
   },
-  statsSection: {
-    marginBottom: 15,
+  expandedContent: {
+    marginTop: 8,
+  },
+  section: {
+    marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 16,
+    fontWeight: 'bold',
+    color: '#27AE60',
     marginBottom: 10,
-    color: '#00D4FF',
   },
-  statContainer: {
+  statsGrid: {
+    gap: 8,
+  },
+  statBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
   },
-  statLabel: {
+  statBarLabel: {
     width: 100,
     fontSize: 12,
+    color: '#666666',
   },
   statBarBackground: {
     flex: 1,
-    height: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 4,
+    height: 6,
+    backgroundColor: '#E8F5E8',
+    borderRadius: 3,
     marginHorizontal: 10,
     overflow: 'hidden',
   },
   statBarFill: {
     height: '100%',
-    borderRadius: 4,
+    backgroundColor: '#27AE60',
+    borderRadius: 3,
   },
-  statValue: {
-    width: 30,
+  statBarValue: {
+    width: 35,
     fontSize: 10,
+    color: '#666666',
     textAlign: 'right',
   },
-  abilitiesSection: {
-    marginBottom: 15,
-  },
   abilityItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-    padding: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 8,
-  },
-  abilityIcon: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginRight: 10,
-  },
-  abilityText: {
-    flex: 1,
-    fontSize: 13,
-  },
-  triviaBox: {
-    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+    backgroundColor: '#F8FCF8',
     padding: 12,
-    borderRadius: 10,
-    marginBottom: 15,
-    borderLeftWidth: 4,
-    borderLeftColor: '#3498DB',
+    borderRadius: 8,
+    marginBottom: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: '#27AE60',
   },
-  triviaTitle: {
+  abilityHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  abilityName: {
     fontSize: 14,
-    marginBottom: 5,
+    fontWeight: '600',
+    color: '#2C3E50',
+  },
+  powerCost: {
+    backgroundColor: '#27AE60',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  powerCostText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  abilityDescription: {
+    color: '#666666',
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  triviaItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 6,
+    padding: 8,
+    backgroundColor: '#F0F9F0',
+    borderRadius: 6,
   },
   triviaText: {
-    fontSize: 12,
-    fontStyle: 'italic',
-    lineHeight: 16,
+    color: '#666666',
+    fontSize: 13,
+    flex: 1,
+    marginLeft: 8,
+    lineHeight: 18,
   },
-  firstAppearance: {
-    fontSize: 11,
-    opacity: 0.7,
-    textAlign: 'center',
+  footer: {
+    alignItems: 'center',
+    padding: 20,
+    marginTop: 10,
   },
-  horizontalScroll: {
-    paddingVertical: 10,
-  },
-  horizontalCard: {
-    marginRight: 15,
-  },
-  infoBox: {
-    padding: 15,
-  },
-  featureList: {
+  footerText: {
+    color: '#27AE60',
     fontSize: 14,
-    lineHeight: 20,
-    marginVertical: 10,
-  },
-  seriesList: {
-    fontSize: 12,
-    textAlign: 'center',
-    marginVertical: 10,
-    opacity: 0.8,
+    fontWeight: '600',
   },
 });
 
-export default TabTwoScreen;
+export default Ben10AlienDatabase;

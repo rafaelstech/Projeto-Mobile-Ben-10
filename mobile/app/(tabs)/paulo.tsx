@@ -1,11 +1,12 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, ScrollView, Dimensions } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Link } from 'expo-router';
+
+const { width: screenWidth } = Dimensions.get('window');
 
 export default function HomeScreen() {
   return (
@@ -14,64 +15,142 @@ export default function HomeScreen() {
       headerImage={
         <Image
           source={require('@/assets/images/nigg.png')}
-          style={styles.reactLogo}
+          style={styles.headerImage}
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Omnitrix</ThemedText>
+        <ThemedText type="title">Os Omnitrix</ThemedText>
       </ThemedView>
+      
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
+        <ThemedText type="subtitle">Omnitrix Original</ThemedText>
+        <Image
+          source={require('@/assets/images/ominitrix classico.webp')}
+          style={styles.omnitrixImage}
+          contentFit="contain"
+        />
+        <ThemedText style={styles.textContent}>
+          • Primeiro modelo criado por Azmuth{'\n'}
+          • 10 aliens inicialmente{'\n'}
+          • Ativação manual girando o mostrador{'\n'}
+          • Corpo branco com verde neon{'\n'}
+          • Propenso a mau funcionamento
         </ThemedText>
       </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Omnitrix Recalibrado</ThemedText>
+        <Image
+          source={require('@/assets/images/ominitrix recalibrado.webp')}
+          style={styles.omnitrixImage}
+          contentFit="contain"
+        />
+        <ThemedText style={styles.textContent}>
+          • Após autorreparação no espaço{'\n'}
+          • Design mais orgânico e biológico{'\n'}
+          • Ativação por toque na tela{'\n'}
+          • Master Control desbloqueado{'\n'}
+          • Nova paleta de cores preta e verde
+        </ThemedText>
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Ultimatrix</ThemedText>
+        <Image
+          source={require('@/assets/images/ultimatrix.webp')}
+          style={styles.omnitrixImage}
+          contentFit="contain"
+        />
+        <ThemedText style={styles.textContent}>
+          • Criado por Albedo{'\n'}
+          • Função Ultimate (evolução dos aliens){'\n'}
+          • Design mais agressivo{'\n'}
+          • Cor preta e vermelha{'\n'}
+          • Menos estável que o Omnitrix original
+        </ThemedText>
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Omnitrix Completo</ThemedText>
+        <Image
+          source={require('@/assets/images/omni.webp')}
+          style={styles.omnitrixImage}
+          contentFit="contain"
+        />
+        <ThemedText style={styles.textContent}>
+          • Versão final e definitiva{'\n'}
+          • Mais de 1 milhão de amostras de DNA{'\n'}
+          • Design inspirado no relógio de bolso{'\n'}
+          • Funcionalidades avançadas{'\n'}
+          • Cor verde e branca clássica
+        </ThemedText>
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Omnitrix de Ben 10.000</ThemedText>
+        <Image
+          source={require('@/assets/images/omnitrix 10000.webp')}
+          style={styles.omnitrixImage}
+          contentFit="contain"
+        />
+        <ThemedText style={styles.textContent}>
+          • Fundido com o pulso de Ben{'\n'}
+          • Ativação por comando de voz{'\n'}
+          • Transformação instantânea{'\n'}
+          • Controle total sobre as transformações{'\n'}
+          • Design biométrico avançado
+        </ThemedText>
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Omnitrix de Omniverso</ThemedText>
+        <Image
+          source={require('@/assets/images/finaltrix.webp')}
+          style={styles.omnitrixImage}
+          contentFit="contain"
+        />
+        <ThemedText style={styles.textContent}>
+          • Nova aparência mais moderna{'\n'}
+          • Interface holográfica{'\n'}
+          • Funcionalidade de escaneamento{'\n'}
+          • Design mais compacto{'\n'}
+          • Cores verde e preta
+        </ThemedText>
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Características Comuns</ThemedText>
+        <ThemedText style={styles.textContent}>
+          • Proteção contra possessão{'\n'}
+          • Tradução universal{'\n'}
+          • Detecção de ameaças{'\n'}
+          • Failsafe de proteção ao usuário{'\n'}
+          • Banco de DNA alienígena
+        </ThemedText>
+      </ThemedView>
+
       <ThemedView style={styles.stepContainer}>
         <Link href="/modal">
           <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
+            <ThemedText type="subtitle">Explorar Mais</ThemedText>
           </Link.Trigger>
           <Link.Preview />
           <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
+            <Link.MenuAction title="Aliens" icon="cube" onPress={() => alert('Aliens pressed')} />
             <Link.MenuAction
-              title="Share"
+              title="Compartilhar"
               icon="square.and.arrow.up"
               onPress={() => alert('Share pressed')}
             />
-            <Link.Menu title="More" icon="ellipsis">
+            <Link.Menu title="Mais" icon="ellipsis">
               <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
+                title="Favoritos"
+                icon="star"
+                onPress={() => alert('Favoritos pressed')}
               />
             </Link.Menu>
           </Link.Menu>
         </Link>
-
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -82,16 +161,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    marginBottom: 20,
   },
   stepContainer: {
-    gap: 8,
+    gap: 12,
+    marginBottom: 20,
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  headerImage: {
+    height: 250,
+    width: '100%',
+  },
+  omnitrixImage: {
+    height: 180,
+    width: screenWidth - 32, 
+    alignSelf: 'center',
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 400,
-    width: 390,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  textContent: {
+    lineHeight: 20,
   },
 });

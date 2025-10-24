@@ -14,7 +14,7 @@ export default function HomeScreen() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
-    // Simulação de login - você pode substituir por sua lógica de autenticação
+    
     if (email && password) {
       setIsLoggedIn(true);
       alert('Login realizado com sucesso!');

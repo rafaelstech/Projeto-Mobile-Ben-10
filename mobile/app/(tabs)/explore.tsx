@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import {
   ScrollView,
@@ -9,7 +8,6 @@ import {
   View,
 } from 'react-native';
 
-// Interfaces TypeScript
 interface AlienAbility {
   name: string;
   description: string;
@@ -40,7 +38,6 @@ interface Alien {
   transformations: string[];
 }
 
-// Dados dos aliens
 const ben10Aliens: Alien[] = [
   {
     id: 1,
@@ -278,7 +275,7 @@ const ben10Aliens: Alien[] = [
   }
 ];
 
-// Componente de Barra de Estatística Simples
+
 const StatBar: React.FC<{ label: string; value: number }> = ({ 
   label, 
   value
@@ -297,7 +294,7 @@ const StatBar: React.FC<{ label: string; value: number }> = ({
   </View>
 );
 
-// Componente de Ícone Alien Simples
+
 const AlienIcon: React.FC<{ type: string; size?: number }> = ({ 
   type, 
   size = 70 
@@ -325,7 +322,7 @@ const AlienIcon: React.FC<{ type: string; size?: number }> = ({
   );
 };
 
-// Componente de Card de Alien Simples
+
 const AlienCard: React.FC<{ alien: Alien }> = ({ alien }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -419,7 +416,7 @@ const AlienCard: React.FC<{ alien: Alien }> = ({ alien }) => {
   );
 };
 
-// Componente Principal Simples
+
 const Ben10AlienDatabase: React.FC = () => {
   const [selectedSeries, setSelectedSeries] = useState<'all' | Alien['series']>('all');
 
@@ -495,7 +492,7 @@ const Ben10AlienDatabase: React.FC = () => {
   );
 };
 
-// Estilos Simples e Verdes
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

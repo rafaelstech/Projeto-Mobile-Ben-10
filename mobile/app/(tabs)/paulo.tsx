@@ -4,7 +4,6 @@ import { Platform, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -127,30 +126,6 @@ export default function HomeScreen() {
           • Failsafe de proteção ao usuário{'\n'}
           • Banco de DNA alienígena
         </ThemedText>
-      </ThemedView>
-
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Explorar Mais</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Aliens" icon="cube" onPress={() => alert('Aliens pressed')} />
-            <Link.MenuAction
-              title="Compartilhar"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="Mais" icon="ellipsis">
-              <Link.MenuAction
-                title="Favoritos"
-                icon="star"
-                onPress={() => alert('Favoritos pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
       </ThemedView>
     </ParallaxScrollView>
   );

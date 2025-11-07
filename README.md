@@ -1,6 +1,6 @@
 # Projeto-Mobile-Ben-10
 
-👥 Integrantes do Grupo
+ Integrantes do Grupo
 Gustavo Kukla
 
 Rafael stech do amaral
